@@ -54,8 +54,6 @@ class CartController extends Controller {
         ->sum('price_subtotal');
 
         return view('carts.index', [
-            'active' => 'carts',
-            'title' => "Keranjang",
             "cartItems" => $cartItems,
             'total' => $total,
         ]);
