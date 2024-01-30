@@ -10,15 +10,12 @@ class LoginController extends Controller
 {
     public function index()
     {
-        return view('login.index', [
-            'title' => 'Login',
-            'active' => 'login',
-        ]);
+        return view('login.index');
     }
 
     public function authenticate(Request $request) {
         $credentials = $request->validate([
-            'username' => ['required', new \App\Rules\UsernameValidationRule],
+            'username' => 'required',
             'password' => 'required',
         ]);
     
@@ -36,7 +33,7 @@ class LoginController extends Controller
         }
     
         Alert::error('Login Failed', 'Invalid Credentials');
-        return back()->with('loginError', 'Login Failed!');
+        return back();
     }
 
     public function logout(Request $request)

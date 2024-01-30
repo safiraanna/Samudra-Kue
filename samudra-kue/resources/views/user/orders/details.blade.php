@@ -8,11 +8,6 @@
                     <h3 class="pt-5 pb-5">Detail Pesanan</h3>
                 </div>
 
-                {{-- <div class="mb-2">
-                    <h6 class="d-inline">Tanggal Pemesanan : </h6>
-                    <p class="d-inline">{{ $order->order_date }}</p>
-                </div> --}}
-
                 <div>
                     <form action="{{route('payment.process', ['orderID' => $order->id])}}" method="POST" id="payment-process">
                         @csrf
@@ -21,16 +16,6 @@
                         <div class="mb-2">
                             <h6 class="d-inline">Status Pesanan : </h6>
                             <span>{{ $order->order_status }}</span>
-        
-                            {{-- @if($order->order_status == 0)
-                                <p class="d-inline">Pesanan telah diterima oleh toko. Akan segera dikemas</p>
-                            @elseif($order->order_status == 1)
-                                <p class="d-inline">Pesanan sedang dikemas.</p>
-                            @elseif($order->order_status == 2)
-                                <p class="d-inline">Pesanan dalam pengantaran ke tujuan</p>
-                            @else
-                                <p class="d-inline">Pesanan selesai</p>
-                            @endif --}}
                         </div>  
         
                         <div class="card">
@@ -61,10 +46,6 @@
                         @endif
                     </form>
                 </div>
-                            
-                {{-- <div class="text-center mt-3">
-                    <a href="{{ url()->previous() }}"><button class="btn text-white" style="background-color: #7CA982">Kembali</button></a>
-                </div> --}}
             </div>
         </div>
     </section>

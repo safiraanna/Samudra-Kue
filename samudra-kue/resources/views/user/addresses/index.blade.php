@@ -27,27 +27,19 @@
                         
                         <div class="mt-3 text-center">
                             <a href="{{ route('addresses.edit', $shippingAddress) }}">
-                                <button type="submit" class="btn text-white" style="background-color: #7CA982">+Edit Alamat</button>
+                                <button type="submit" class="btn text-white" style="background-color: #558564">+Edit Alamat</button>
                             </a>
                         </div>
                     @else
                         <p>Anda belum menyimpan alamat</p>
                         <div class="mt-3 text-center">
                             <a href="{{ route('addresses.create') }}">
-                                <button type="submit" class="btn text-white" style="background-color: #7CA982">+Tambah Alamat</button>
+                                <button type="submit" class="btn text-white" style="background-color: #558564">+Tambah Alamat</button>
                             </a>
                         </div>
                     @endif
                 </div>
             </div>
         </div>
-
-        <script>
-            @if(session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
-        </script>
     </section>
 @endsection

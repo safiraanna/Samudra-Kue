@@ -28,8 +28,8 @@
                                     <div>
                                         {{ $message }}
                                     </div>
-                                    @enderror
-                                    <input type="text" class="form-control rounded-top @error('full_name') is-invalid @enderror" name="full_name" id="full_name" placeholder="FullName" required value="{{ old('full_name') }}">
+                                @enderror
+                                <input type="text" class="form-control rounded-top @error('full_name') is-invalid @enderror" name="full_name" id="full_name" placeholder="FullName" required value="{{ old('full_name') }}">
                             </div>
         
                             <div class="form-group mb-2">

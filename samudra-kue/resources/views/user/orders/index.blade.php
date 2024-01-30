@@ -18,7 +18,6 @@
                                         <div class="card-text">
                                             <div class="">
                                                 <h5 class="d-inline">Pesanan {{ $index + 1}} : </h5>
-                                                {{-- <p class="d-inline text-right">Total Pembayaran : Rp {{ number_format($order->payment_total + $order->shipping_cost, 2, '.', ',') }}</p> --}}
 
                                                 <div class="d-inline text-right">
                                                     <button class="btn text-dark" style="background-color: #fafafa">
@@ -33,7 +32,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            {{-- @endif --}}
                         @endforeach
                     @endif
                 </div>

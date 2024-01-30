@@ -82,7 +82,7 @@
                 <div class="col-md-12 mt-3">
                     <div class="card" >
                         <div class="card-body">
-                            <p class="m-2">{!! nl2br(e($product->description)) !!}</p>
+                            <p class="m-2">{ $product->description }</p>
                         </div>
                     </div>
                 </div>

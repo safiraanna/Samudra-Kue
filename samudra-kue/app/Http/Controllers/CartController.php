@@ -70,10 +70,6 @@ class CartController extends Controller {
             return redirect()->back()->with('error', 'Anda belum memilih produk apapun untuk checkout.');
         }
     
-        // if (!$this->userHasAddress()) {
-        //     return redirect()->route('addresses.index')->with('error', 'Tambahkan alamat terlebih dahulu.');
-        // }
-    
         // Pembaruan chosen hanya jika ada produk yang dipilih
         CartItem::whereIn('productID', $chosenProducts)
             ->update(['chosen' => 1]);
@@ -104,36 +100,13 @@ class CartController extends Controller {
             'shippingAddress' => $shippingAddress, 
             'total' => $total, 
             'cartItems' => $cartItems,
-            'shippingCost' => $shippingCost, // Menambahkan biaya pengiriman ke view
+            'shippingCost' => $shippingCost,
         ]);
-    }
-    
-        private function userHasAddress() {
-        $shippingAddress = ShippingAddress::where('userID', auth()->id())->first();
-        return $shippingAddress ? true : false;
-    }
-    
-    private function calculateShippingCost($kecamatan) {
-        switch ($kecamatan) {
-            case 'Banjar':
-                return 2000;
-            case 'Purwaharja':
-                return 4000;
-            case 'Pataruman':
-                return 7000;
-            case 'Langensari':
-                return 9000;
-            default:
-                return 0;
-        }
     }
 
     public function storeCheckout(Request $request) {
-        Log::info('Metode storeCheckout dijalankan.');
-
         $request->validate([
             'address' => 'required|exists:shipping_addresses,id',
-            // 'order_date' => 'required|date',
             'shipping_cost' => 'required',
             'payment_total' => 'required|numeric',
             'payment_method' => 'required',
@@ -145,11 +118,10 @@ class CartController extends Controller {
         $addressId = $request->input('address');
         $address = ShippingAddress::find($addressId);
     
-        // Buat entri baru di tabel `order`
+        // Buat entri baru di tabel order
         $order = new Order();
         $order->userID = auth()->user()->id;
         $order->addressID = $address->id;
-        // $order->order_date = $request->input('order_date');
         $order->shipping_cost = $request->input('shipping_cost');
         $order->payment_total = $request->input('payment_total');
         $order->payment_method = $request->input('payment_method');
@@ -160,43 +132,41 @@ class CartController extends Controller {
     
         $chosenProductIds = $request->input('chosenProducts');
 
-        DB::transaction(function () use ($order, $chosenProductIds) {
-            // Simpan Order
-            $order->save();
-    
-            foreach ($chosenProductIds as $productId) {
-                // Cari instance CartItem yang sesuai dengan ID produk
-                $cartItem = CartItem::where('userID', auth()->id())
-                    ->where('productID', $productId)
-                    ->where('chosen', 1)
-                    ->first();
-    
-                if ($cartItem) {
-                    // Pastikan stok cukup untuk pesanan
-                    $product = Product::find($cartItem->productID);
-                    if ($cartItem->qty > $product->stocks) {
-                        // Handle kasus di mana stok tidak mencukupi
-                        // Misalnya, tambahkan pesan kesalahan dan arahkan kembali ke halaman sebelumnya
-                        return redirect()->back()->with('alert-error', 'Stok barang tidak mencukupi.');
-                    }
+        // Simpan Order
+        $order->save();
 
-                    // Buat dan simpan entri baru di tabel `order_item` untuk setiap produk yang dipilih
-                    $orderItem = new OrderItem();
-                    $orderItem->orderID = $order->id;
-                    $orderItem->productID = $cartItem->productID;
-                    $orderItem->price = $cartItem->price_subtotal;
-                    $orderItem->qty = $cartItem->qty;
-                    $orderItem->save();
+        foreach ($chosenProductIds as $productId) {
+            // Cari entri CartItem yang sesuai dengan ID produk
+            $cartItem = CartItem::where('userID', auth()->id())
+                ->where('productID', $productId)
+                ->where('chosen', 1)
+                ->first();
 
-                    // Update stok produk
-                    $product = Product::find($cartItem->productID);
-                    $product->stocks -=$cartItem->qty;
-                    $product->save();
-
-                    $cartItem->delete();
+            if ($cartItem) {
+                // Handling untuk ketersediaan stok
+                $product = Product::find($cartItem->productID);
+                if ($cartItem->qty > $product->stocks) {
+                    // Handle kasus di mana stok tidak mencukupi
+                    Alert::error('Maaf', 'Stok barang tidak mencukupi');
+                    return redirect()->back();
                 }
+
+                // Buat dan simpan entri baru di tabel order_item untuk setiap produk yang dipilih
+                $orderItem = new OrderItem();
+                $orderItem->orderID = $order->id;
+                $orderItem->productID = $cartItem->productID;
+                $orderItem->price = $cartItem->price_subtotal;
+                $orderItem->qty = $cartItem->qty;
+                $orderItem->save();
+
+                // Update stok produk
+                $product = Product::find($cartItem->productID);
+                $product->stocks -=$cartItem->qty;
+                $product->save();
+
+                $cartItem->delete();
             }
-        });
+        }
     
         return redirect()->route('orders')->with('success', 'Pesanan Anda telah berhasil dibuat');
     }

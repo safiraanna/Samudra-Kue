@@ -14,11 +14,6 @@
                         @method('POST')
 
                         <div class="form-group">
-                            {{-- <div>
-                                <label for="order_date">Tanggal Pesanan:</label>
-                                <input type="date" name="order_date" id="order_date" class="form-control mt-1 mb-2">
-                            </div> --}}
-
                             <div>
                                 <label for="address">Alamat Pengiriman :</label>
                                 @if ($shippingAddress)
@@ -69,16 +64,6 @@
                     
                         <!-- Tombol Submit -->
                         <button type="submit" class="btn mt-3 text-white" id="checkout-button" style="background-color: #7CA982">+ Buat Pesanan</button>
-
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
                     </form> 
                 </div>
             </div>

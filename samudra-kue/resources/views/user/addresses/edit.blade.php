@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row">
                 <div class="mt-3 mb-5">
-                    <h3 class="mt-3 text-center">Ubah Alamat</h3>
+                    <h3 class="mt-3 text-center">Edit Alamat</h3>
                 </div>
 
                 <div class="card">
@@ -14,30 +14,17 @@
                             @csrf
                             @method('PUT')
     
-                            <input type="hidden" name="address_id" value="{{ $address->id }}">
                             <div class="form-group mb-2">
-                                <label for="province" class="m-2">Provinsi : </label>
-                                <select class="form-select rounded-top" name="province" id="province">
-                                    <option value="" disabled selected>Pilih Provinsi</option>
-                                    <option value="Jawa Barat">Jawa Barat</option>
-                                </select>
+                                <label for="province" class="m-2">Provinsi</label>
+                                <input type="text" class="form-control rounded-top" name="province" id="province" value="{{ $address->province }}">
                             </div>
                             <div class="form-group mb-2">
-                                <label for="city" class="m-2">Kota : </label>
-                                <select class="form-select rounded-top" name="city" id="city">
-                                    <option value="" disabled selected>Pilih Kota/Kabupaten</option>
-                                    <option value="Banjar">Banjar</option>
-                                </select>
+                                <label for="city" class="m-2">Kabupaten/Kota</label>
+                                <input type="text" class="form-control rounded-top" name="city" id="city" value="{{ $address->city }}">
                             </div>
                             <div class="form-group mb-2">
-                                <label for="kecamatan" class="m-2">Kecamatan : </label>
-                                <select class="form-select rounded-top" name="kecamatan" id="kecamatan">
-                                    <option value="" disabled selected>Pilih Kecamatan</option>
-                                    <option value="Banjar">Banjar</option>
-                                    <option value="Purwaharja">Purwaharja</option>
-                                    <option value="Pataruman">Pataruman</option>
-                                    <option value="Langensari">Langensari</option>
-                                </select>
+                                <label for="kecamatan" class="m-2">Kecamatan</label>
+                                <input type="text" class="form-control rounded-top" name="kecamatan" id="kecamatan" value="{{ $address->kecamatan }}">
                             </div>
                             <div class="form-group mb-2">
                                 <label for="kelurahan" class="m-2">Kelurahan : </label>
@@ -53,7 +40,7 @@
                             </div>
 
                             <div class="text-right">
-                                <button type="submit" class="btn mt-3 text-white ml-auto" style="background-color: #7CA982">Simpan Alamat</button>
+                                <button type="submit" class="btn mt-3 text-white ml-auto" style="background-color: #558564">Simpan Alamat</button>
                             </div>
                         </form>
                     </div>

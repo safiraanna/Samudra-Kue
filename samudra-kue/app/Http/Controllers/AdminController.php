@@ -16,16 +16,19 @@ use Illuminate\Support\Facades\File;
 class AdminController extends Controller
 {
     public function dashboard() {
-        $orders = Order::all();
+        $orders =Order::all();
         $users = User::all();
+        
+        $latestOrders = Order::latest()->take(10)->get();
 
         $benefit = $orders->sum('payment_total');
+        
+        $soldoutProducts = Product::where('stocks', 0)->get();
 
-        return view("admin.index", compact("orders","users", "benefit"));
+        return view('admin.index', compact('orders','users', 'benefit', 'latestOrders', 'soldoutProducts'));
     }
 
     public function showOrder(Request $request) {
-        // $pesanan = Order::with('user')->where('order_status', 'Pesanan diterima oleh toko')->orWhere('order_status', 'Pesanan sedang dikemas')->orWhere('order_status', 'Pesanan dalam pengantaran ke tujuan')->get();
         $pesanan = Order::with('user')->whereIn ('order_status', [
             'Pesanan diterima oleh toko',
             'Pesanan sedang dikemas',
@@ -68,19 +71,16 @@ class AdminController extends Controller
     }
 
     public function showProducts(Request $request) {
-        // $products = Product::all();
-
-        $products = Product::filter($request->only('search'))
-            ->simplePaginate(5);
-    
-        if(!$request->has('search')) {
-            $products = Product::simplePaginate(5);
+        $searchTerm = $request->input('search');
+        $query = Product::query();
+        
+        if ($searchTerm) {
+            $query->where('product_name', 'LIKE', "%{$searchTerm}%");
         }
+        
+        $products = $query->paginate(5);
 
-        return view('admin.product.index', [
-            'active' => 'products',
-            'products' => $products,
-        ]);
+        return view('admin.product.index', compact('products'));
     }
 
     public function destroyProducts(Product $product) {
@@ -138,8 +138,6 @@ class AdminController extends Controller
             // Menyimpan gambar di dalam folder public/pictures/product_images
             $gambar->move(public_path($folder), $filename);
             $gambarPath = $filename;
-
-            // $gambarPath = $gambar->store('product_images', 'public');
         
             // Simpan nama file gambar ke kolom picture_names
             $productImage = new ProductImage;
@@ -178,14 +176,11 @@ class AdminController extends Controller
     }
 
     public function weeklySalesReport() {
-        // Menghitung minggu saat ini
-        // $currentWeek = Carbon::now()->week;
     
-        // Mengambil data transaksi per minggu
         $weeklySales = Order::select(
             DB::raw('YEAR(created_at) as year'),
             DB::raw('MONTH(created_at) as month'),
-            DB::raw('FLOOR((DAY(created_at) - 1) / 7) + 1 as week'),
+            DB::raw('WEEK(created_at) as week'),
             DB::raw('SUM(payment_total) as total_sales')
         )
         ->groupBy('year', 'month', 'week')
@@ -226,10 +221,7 @@ class AdminController extends Controller
             ->whereBetween('orders.created_at', [$startDate, $endDate])
             ->get();
     
-        // Hitung total pemasukkan
-        $totalRevenue = $weeklyDetails->sum('price');
-    
-        return view('admin.report.details', compact('weeklyDetails', 'startDate', 'endDate', 'totalRevenue'));
+        return view('admin.report.details', compact('weeklyDetails', 'startDate', 'endDate'));
     }
     
 }

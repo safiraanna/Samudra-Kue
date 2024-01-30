@@ -3,22 +3,20 @@
 @section('content')
     <section>
         <div class="container">
-            <div class="row">
-                <div class="col-md-8">
+            <div>
+                <div>
                     <h3 class="mt-5">Daftar Produk</h3> 
                 </div>
 
-                {{-- <div>
-                    <p>Cari</p>
-                    <form>
-                        <div>
-                            <input type="search" placeholder="cari produk..." name="search" value="{{ $request('search') }}" aria-label="Search">
-                            <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
-                        </div>
-                    </form>
-                </div> --}}
-
                 <div class="m-auto pt-3 table-responsive">
+                    <div>
+                        <form action="{{ route('all.products') }}" method="GET">
+                            <div class="form-group d-flex">
+                                <input type="search" class="form-control form-control-lg mr-2" placeholder="Cari disini..." name="search" aria-label="Search">
+                                <button class="btn btn-outline-secondary" type="submit">Cari</button>
+                            </div>
+                        </form>
+                    </div>
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -28,7 +26,6 @@
                                 <th scope="col">Harga Satuan</th>
                                 <th scope="col">Harga Satuan dalam Dus</th>
                                 <th scope="col">Satuan per Dus</th>
-                                <th scope="col">Deskripsi</th>
                                 <th scope="col">Aksi</th>
                             </tr>
                         </thead>
@@ -43,16 +40,14 @@
                                     <td>{{ $product->price_box_unit }}</td>
                                     <td>{{ $product->unit_per_box }}</td>
                                     <td>
-                                        <form action="{{ route('products.destroy', $product) }}" method="post">
+                                        <form action="{{ route('products.destroy', $product) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-danger" type="submit">Delete</button>
+                                            <button class="btn" type="submit"><span style="color: #D33F49; font-weight: bold">Hapus</span></button>
                                         </form>
-
-                                        <br>
                                         
                                         <form action="{{ route('products.edit', $product) }}" method="GET">
-                                            <button class="btn btn-primary" type="submit">Edit</button>
+                                            <button class="btn" type="submit"><span style="color: #414288; font-weight: bold">Ubah</span></button>
                                         </form>
                                         
                                     </td>
@@ -60,16 +55,9 @@
                             @endforeach
                         </tbody>
                     </table>
-
-                    <div class="d-flex justify-content-center mt-4">
-                        @if ($products->previousPageUrl())
-                            <a href="{{ $products->previousPageUrl() }}" class="btn btn-primary" rel="prev">&lt;</a>
-                        @endif
-                        
-                        @if ($products->nextPageUrl())
-                            <a href="{{ $products->nextPageUrl() }}" class="btn btn-primary ml-3" rel="next">&gt;</a>
-                        @endif
-                    </div>
+                    
+                    <!-- Paginasi Kustom -->
+                    @include('layouts.pagination', ['paginator' => $products])
                 </div>
             </div>
         </div>

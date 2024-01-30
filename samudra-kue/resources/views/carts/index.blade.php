@@ -1,13 +1,5 @@
 @extends('layouts.main')
 
-<head>
-    @if (session('alert-error'))
-        <div class="alert alert-danger">
-            {{ session('alert-error') }}
-        </div>
-    @endif
-</head>
-
 @section('container')
     <section>
         <div class="container">
@@ -47,9 +39,6 @@
                                 </div>
                             @endforeach
                         @endif
-
-                        <!-- Input hidden untuk produk yang dipilih -->
-                        {{-- <input type="hidden" name="chosen_products" id="chosen-products" value=""> --}}
 
                         <div class="mt-3 text-right">
                             <button type="submit" class="btn text-white" style="background-color: #7CA982" id="checkout-button">Checkout Sekarang</button>

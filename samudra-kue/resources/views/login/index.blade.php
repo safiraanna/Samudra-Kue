@@ -48,7 +48,7 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                        <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" id="username" placeholder="Username" required value="{{ old('username') }}">
+                                    <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" id="username" placeholder="Username" required value="{{ old('username') }}">
                                 </div>
     
                                 <div class="form-group mb-2">

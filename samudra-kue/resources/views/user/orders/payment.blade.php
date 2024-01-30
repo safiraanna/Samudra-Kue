@@ -30,8 +30,6 @@
 
         <form action="{{ route('update.checkout') }}" id="submit_form" method="POST">
             @csrf
-            {{-- ini biar data payment bisa masuk ke database, jadi kita akalin pake id "json_callback" yang di olah pake kodingan func
-             send_response_to_form(result) --}}
             <input type="hidden" name="order_id" value="{{ $order->id }}">
             <input type="hidden" name="json" id="json_callback">
           </form>
@@ -73,7 +71,7 @@
             function send_response_to_form(result) {
                 document.getElementById('json_callback').value = JSON.stringify(result);
 
-                alert(document.getElementById('json_callback').value);
+                // alert(document.getElementById('json_callback').value);
                 $('#submit_form').submit();;
             }
         </script>

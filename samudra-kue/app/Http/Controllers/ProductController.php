@@ -3,33 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 
-class ProductController extends Controller 
-{
+class ProductController extends Controller {
     public function home(Request $request) {
-        $title = ' ';
+        // Filter pencarian
+        $products = Product::filter($request->only('search'));
     
-        $products = Product::filter($request->only('search'))
-            ->simplePaginate(12);
-    
-        if(!$request->has('search')) {
-            $products = Product::simplePaginate(12);
-        }
+        // Paginasi
+        $products = $products->paginate(12);
     
         return view('home', [
-            'active' => 'products',
-            'title' => "Samudra Kue" . $title,
             'products' => $products,
+            'isEmptySearch' => $products->total() === 0,
         ]);
     }
     
     public function show(Product $product) { 
     
         return view('products.product', [
-            'active' => 'products',
-            'title' => "Single Product",
             'product' => $product
         ]);
     }
