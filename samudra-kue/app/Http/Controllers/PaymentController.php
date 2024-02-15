@@ -6,11 +6,11 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Midtrans\Snap;
 use Midtrans\Config;
 
-class PaymentController extends Controller
-{
+class PaymentController extends Controller {
     public function processPayment(Request $request, $orderID) {
         $order = Order::find($orderID);
 
@@ -18,8 +18,6 @@ class PaymentController extends Controller
             // Handle jika pesanan tidak ditemukan
             return redirect()->route('home')->with('alert-error', 'Pesanan tidak ditemukan.');
         }
-
-        // Lakukan validasi pembayaran di sini jika diperlukan
 
         // Membuat pembayaran dengan Midtrans
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');

@@ -16,22 +16,18 @@
                                 <div class="card mt-3">
                                     <div class="card-body">
                                         <div class="card-text">
-                                            <div class="">
-                                                <h5 class="d-inline">Pesanan {{ $index + 1}} : </h5>
-
-                                                <div class="d-inline text-right">
-                                                    <button class="btn text-dark" style="background-color: #fafafa">
-                                                            <p>{{$order->order_status}}</p>
-                                                    </button>
-                                                </div>
+                                            <div class="row">
+                                                <h5 class="col-lg-2">Pesanan {{ $index + 1}} : </h5>
+                                                <p class="col-lg-10 text-right" style="color: #ECA400; font-weight: bold">{{$order->order_status}}</p>
                                             </div>
                                             
                                             <div class="text-right">
-                                                <a href="{{ route('orders.details', ['orderID' => $order->id]) }}"><button class="btn text-white" style="background-color: #7CA982">Lihat Detail</button></a>
+                                                <a href="{{ route('orders.details', ['orderID' => $order->id]) }}"><button class="btn text-white" style="background-color: #558564">Lihat Detail</button></a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            {{-- @endif --}}
                         @endforeach
                     @endif
                 </div>

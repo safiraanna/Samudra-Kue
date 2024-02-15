@@ -12,19 +12,33 @@
                     <div class="card-body">
                         <form action="{{ route('addresses.update', ['id' => $address->id]) }}" method="POST">
                             @csrf
-                            @method('PUT')
     
                             <div class="form-group mb-2">
                                 <label for="province" class="m-2">Provinsi</label>
                                 <input type="text" class="form-control rounded-top" name="province" id="province" value="{{ $address->province }}">
+                                {{-- <select class="form-select rounded-top" name="province" id="province">
+                                    <option value="" disabled selected>Pilih Provinsi</option>
+                                    <option value="Jawa Barat">Jawa Barat</option>
+                                </select> --}}
                             </div>
                             <div class="form-group mb-2">
                                 <label for="city" class="m-2">Kabupaten/Kota</label>
                                 <input type="text" class="form-control rounded-top" name="city" id="city" value="{{ $address->city }}">
+                                {{-- <select class="form-select rounded-top" name="city" id="city">
+                                    <option value="" disabled selected>Pilih Kota/Kabupaten</option>
+                                    <option value="Banjar">Banjar</option>
+                                </select> --}}
                             </div>
                             <div class="form-group mb-2">
                                 <label for="kecamatan" class="m-2">Kecamatan</label>
                                 <input type="text" class="form-control rounded-top" name="kecamatan" id="kecamatan" value="{{ $address->kecamatan }}">
+                                {{-- <select class="form-select rounded-top" name="kecamatan" id="kecamatan">
+                                    <option value="" disabled selected>Pilih Kecamatan</option>
+                                    <option value="Banjar">Banjar</option>
+                                    <option value="Purwaharja">Purwaharja</option>
+                                    <option value="Pataruman">Pataruman</option>
+                                    <option value="Langensari">Langensari</option>
+                                </select> --}}
                             </div>
                             <div class="form-group mb-2">
                                 <label for="kelurahan" class="m-2">Kelurahan : </label>

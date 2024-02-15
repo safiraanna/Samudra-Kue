@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Dompdf\Dompdf;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Product;
@@ -25,7 +26,7 @@ class AdminController extends Controller
         
         $soldoutProducts = Product::where('stocks', 0)->get();
 
-        return view('admin.index', compact('orders','users', 'benefit', 'latestOrders', 'soldoutProducts'));
+        return view("admin.index", compact("orders","users", "benefit", "latestOrders", "soldoutProducts"));
     }
 
     public function showOrder(Request $request) {
@@ -33,19 +34,20 @@ class AdminController extends Controller
             'Pesanan diterima oleh toko',
             'Pesanan sedang dikemas',
             'Pesanan dalam pengantaran ke tujuan'
-        ])->get();
+        ])
+        ->simplePaginate(10);
 
         return view('admin.order.order', compact('pesanan'));
     }
 
     public function showFinishedOrder(Request $request) {
-        $pesanan = Order::with('user')->where('order_status', 'Pesanan Selesai')->get();
+        $pesanan = Order::with('user')->where('order_status', 'Pesanan Selesai')->simplePaginate(10);
 
         return view('admin.order.finishedOrder', compact('pesanan'));
     }
 
     public function showUsers(Request $request) {
-        $pengguna = User::all();
+        $pengguna = User::simplePaginate(10);
 
         return view('admin.user.users', compact('pengguna'));
     }
@@ -80,7 +82,9 @@ class AdminController extends Controller
         
         $products = $query->paginate(5);
 
-        return view('admin.product.index', compact('products'));
+        return view('admin.product.index', [
+            'products' => $products,
+        ]);
     }
 
     public function destroyProducts(Product $product) {
@@ -138,6 +142,8 @@ class AdminController extends Controller
             // Menyimpan gambar di dalam folder public/pictures/product_images
             $gambar->move(public_path($folder), $filename);
             $gambarPath = $filename;
+
+            // $gambarPath = $gambar->store('product_images', 'public');
         
             // Simpan nama file gambar ke kolom picture_names
             $productImage = new ProductImage;
@@ -175,19 +181,18 @@ class AdminController extends Controller
         return redirect()->route('all.products')->with('success', 'Produk berhasil ditambahkan.');
     }
 
-    public function weeklySalesReport() {
-    
-        $weeklySales = Order::select(
+    public function monthlySalesReport() {
+        $monthlySales = Order::select(
             DB::raw('YEAR(created_at) as year'),
             DB::raw('MONTH(created_at) as month'),
-            DB::raw('WEEK(created_at) as week'),
+            // DB::raw('WEEK(created_at, 1) as week'), // Menentukan bahwa minggu dimulai dari Senin
             DB::raw('SUM(payment_total) as total_sales')
         )
-        ->groupBy('year', 'month', 'week')
+        ->groupBy('year', 'month') //'week'
         ->orderBy('year', 'desc')
         ->orderBy('month', 'desc')
-        ->orderBy('week', 'desc')
-        ->get();
+        // ->orderBy('week', 'desc')
+        ->paginate(10);
     
         // Mengambil daftar produk terjual per minggu
         $bestProducts = OrderItem::select(
@@ -201,15 +206,31 @@ class AdminController extends Controller
             ->take(10) // Ambil 10 produk teratas
             ->get();
     
-        return view('admin.report.report', compact('weeklySales', 'bestProducts'));
+        return view('admin.report.report', compact('monthlySales', 'bestProducts'));
     }
 
-    public function weeklySalesDetails($year, $month, $week) {
-        $startDate = Carbon::parse("{$year}-{$month}-{$week}")->startOfWeek();
-        $endDate = Carbon::parse("{$year}-{$month}-{$week}")->endOfWeek();
-    
-        // Ambil data detail laporan per minggu
-        $weeklyDetails = OrderItem::select(
+    public function monthlySalesDetails($year, $month) {
+        // Mendapatkan data tahun, bulan, dan minggu dari parameter rute
+        $startYear = $year;
+        $startMonth = $month;
+
+        $endYear = $year;
+        $endMonth = $month;
+        // $startWeek = $week;
+
+        // Menghitung tanggal awal dan akhir dari minggu sebelumnya
+        $startDate = Carbon::create()->setYear($startYear)->setMonth($startMonth)->startOfMonth();
+        $endDate = Carbon::create()->setYear($endYear)->setMonth($endMonth)->endOfMonth();
+
+        // Jika minggu pertama adalah minggu pertama dari tahun baru,
+        // kita perlu mengambil minggu terakhir dari tahun sebelumnya
+        // if ($startMonth === 1 && $startMonth === 1) {
+        //     $startDate->subWeek(); 
+        //     $endDate->subWeek();
+        // }
+
+        // Mendapatkan detail penjualan per minggu
+        $monthlyDetails = OrderItem::select(
                 'products.product_name',
                 'order_items.qty',
                 'order_items.price',
@@ -218,10 +239,47 @@ class AdminController extends Controller
             )
             ->join('orders', 'order_items.orderID', '=', 'orders.id')
             ->join('products', 'order_items.productID', '=', 'products.id')
-            ->whereBetween('orders.created_at', [$startDate, $endDate])
+            ->whereBetween('order_items.created_at', [$startDate, $endDate])
             ->get();
-    
-        return view('admin.report.details', compact('weeklyDetails', 'startDate', 'endDate'));
+
+        // Menghitung total penjualan
+        $totalSales = $monthlyDetails->sum('price');
+
+        // Menampilkan halaman detail
+        return view('admin.report.details', compact('monthlyDetails', 'totalSales', 'startDate', 'endDate', 'startYear', 'startMonth')); //'startMonth
     }
+
+    public function printMonthlySalesReport($year, $month) {
+        // Hitung tanggal awal dan akhir
+        $startDate = Carbon::create()->setYear($year)->setMonth($month)->startOfMonth();
+        $endDate = Carbon::create()->setYear($year)->setMonth($month)->endOfMonth();
+
+        // Dapatkan data laporan
+        $monthlyDetails = OrderItem::select(
+            'products.product_name',
+            'order_items.qty',
+            'order_items.price',
+            'orders.id as orderID',
+            'orders.userID'
+        )
+        ->join('orders', 'order_items.orderID', '=', 'orders.id')
+        ->join('products', 'order_items.productID', '=', 'products.id')
+        ->whereBetween('order_items.created_at', [$startDate, $endDate])
+        ->get();
+
+        // Atur data yang akan ditampilkan
+        $data = [
+            'startDate' => $startDate->toDateString(),
+            'endDate' => $endDate->toDateString(),
+            'monthlyDetails' => $monthlyDetails,
+        ];
     
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml(view('admin.report.print', $data));
+        $dompdf->render();
+    
+        $dompdf->setPaper('a4','landscape');
+        $dompdf->stream('Laporan-' . $month . '-' . $year);
+        
+    }
 }

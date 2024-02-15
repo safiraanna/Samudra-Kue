@@ -48,7 +48,7 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                    <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" id="username" placeholder="Username" required value="{{ old('username') }}">
+                                        <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" id="username" placeholder="Username" required value="{{ old('username') }}">
                                 </div>
     
                                 <div class="form-group mb-2">
@@ -63,7 +63,7 @@
     
                                 <div>
                                     <div class="form-group">
-                                        <input class="form-control mt-5 text-white" type="submit" name="submit" id="submit" value="Masuk" style="background-color: #7CA982">
+                                        <input class="form-control mt-5 text-white" type="submit" name="submit" id="submit" value="Masuk" style="background-color: #558564">
                                     </div>
                                     <div class="mt-3">
                                         <p>Belum Punya Akun? <a href="/register">Buat Akun Sekarang!</a></p>

@@ -3,8 +3,8 @@
 @section('content')
     <section>
         <div class="container">
-            <div class="row">
-                <div class="col-md-8">
+            <div>
+                <div>
                     <h3 class="mt-5">Daftar Pengguna</h3>
                 </div>
 
@@ -32,6 +32,10 @@
                             @endforeach
                         </tbody>
                     </table>
+                    
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $pengguna->links() }}
+                    </div>
                 </div>
             </div>
         </div>

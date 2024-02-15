@@ -15,6 +15,7 @@
                                 <th scope="col">ID Pesanan</th>
                                 <th scope="col">Nama Pelanggan</th>
                                 <th scope="col">Total Harga</th>
+                                <th scope="col">Tanggal Selesai</th>
                                 <th scope="col">Status Pesanan</th>
                             </tr>
                         </thead>
@@ -25,17 +26,16 @@
                                     <td>{{ $order->id }}</td>
                                     <td>{{ $order->user ? $order->user->username : 'Tidak Ada User Terkait' }}</td>
                                     <td>{{ $order->payment_total }}</td>
-                                    <td>
-                                        @if ($order->order_status == 'Pesanan Selesai')
-                                            Pesanan Selesai
-                                        @else
-                                            Status tidak diketahui
-                                        @endif
-                                    </td>
+                                    <td>{{ $order->updated_at }}</td>
+                                    <td>{{ $order->order_status }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $pesanan->links() }}
+                    </div>
                 </div>
             </div>
         </div>

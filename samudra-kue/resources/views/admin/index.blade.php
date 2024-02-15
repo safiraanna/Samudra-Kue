@@ -3,17 +3,17 @@
 @section('content')
     <section>
         <div class="container">
-            <div class="">
+            <div>
                 <div class="col-md-6">
-                    <h3 class="mt-5">Halaman Administrator</h3>
+                    <h2 class="mt-5">Halaman Administrator</h2>
                 </div>
 
-                <div class="row mt-4">
+                <div class="row mt-3">
                     <div class="col-4">
                         <div class="card border-dark">
                             <div class="card-body text-center">
-                                <p class="card-title">Pesanan Bulan Ini</p>
-                                <p class="card-text">{{ $orders->count() }}</p>
+                                <h4 class="card-title">Total Pesanan</h4>
+                                <h4 class="card-text">{{ $orders->count() }}</h4>
                             </div>
                         </div>
                     </div>
@@ -21,8 +21,8 @@
                     <div class="col-4">
                         <div class="card border-dark">
                             <div class="card-body text-center">
-                                <p class="card-title">Jumlah Pemasukan Bulan ini</p>
-                                <p class="card-text">Rp {{ number_format($benefit, 2, '.', ',') }}</p>
+                                <h4 class="card-title">Total Pendapatan</h4>
+                                <h4 class="card-text">Rp {{ number_format($benefit, 2, '.', ',') }}</h4>
                             </div>
                         </div>
                     </div>
@@ -30,19 +30,23 @@
                     <div class="col-4">
                         <div class="card border-dark">
                             <div class="card-body text-center">
-                                <p class="card-title">Pengguna Aktif</p>
-                                <p class="card-text">{{ $users->count() }}</p>
+                                <h4 class="card-title">Pengguna Terdaftar</h4>
+                                <h4 class="card-text">{{ $users->count() }}</h4>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="row mt-lg-5">
-                    <div class="col-md-12">
-                        <h3>Riwayat Transaksi</h3>
+            </div>
+            
+            <hr>
+            
+            <div>    
+                <div class="mt-3">
+                    <div>
+                        <h3>Transaksi Terbaru</h3>
                     </div>
 
-                    <div class="col-md-12 ">
+                    <div>
                         <div class="m-auto pt-3 table-responsive">
                             <table class="table table-hover">
                                 <thead>
@@ -55,12 +59,42 @@
                                 </thead>
 
                                 <tbody>
-                                    @foreach ($orders as $index => $order)
+                                    @foreach ($latestOrders as $index => $latestOrder)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
-                                            <td>{{ $order->user ? $order->user->username : 'Tidak Ada User Terkait' }}</td>
-                                            <td>{{ $order->created_at }}</td>
-                                            <td>Rp {{ number_format($order->payment_total, 2, '.', ',') }}</td>
+                                            <td>{{ $latestOrder->user ? $latestOrder->user->username : 'Tidak Ada User Terkait' }}</td>
+                                            <td>{{ $latestOrder->created_at }}</td>
+                                            <td>Rp {{ number_format($latestOrder->payment_total, 2, '.', ',') }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <div class="mt-3">
+                    <div>
+                        <h3>Produk yang Habis</h3>
+                    </div>
+
+                    <div>
+                        <div class="m-auto pt-3 table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID Produk</th>
+                                        <th scope="col">Nama Produk</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach ($soldoutProducts as $soldout)
+                                        <tr>
+                                            <td>{{ $soldout->id }}</td>
+                                            <td>{{ $soldout->product_name }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

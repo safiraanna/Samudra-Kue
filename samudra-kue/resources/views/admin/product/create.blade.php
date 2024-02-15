@@ -4,7 +4,7 @@
     <section>
         <div class="container">
             <div class="">
-                <div class="">
+                <div>
                     <h3 class="mt-5 mb-3">Tambah Produk</h3>
                 </div>
 

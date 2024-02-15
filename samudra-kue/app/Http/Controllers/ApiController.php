@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
-class ApiController extends Controller 
-{
+class ApiController extends Controller {
     public function payment_handler(Request $request) {
+        $serverkey = env('MIDTRANS_SERVER_KEY');
+        
         //ubah data ke bentuk JSON
         $json = json_decode($request->getContent());
 
@@ -20,7 +21,7 @@ class ApiController extends Controller
         }
 
         //status berhasil
-        $order = Order::where('id', $json->order_id,)->first();
+        $order = Order::where('id', $json->order_id)->first();
 
         //return dengan update data order
         // return $order->update(['payment_status' => $json->transaction_status]);

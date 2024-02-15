@@ -6,16 +6,17 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class LoginController extends Controller
-{
-    public function index()
-    {
-        return view('login.index');
+class LoginController extends Controller {
+    public function index() {
+        return view('login.index', [
+            'title' => 'Login',
+            'active' => 'login',
+        ]);
     }
 
     public function authenticate(Request $request) {
         $credentials = $request->validate([
-            'username' => 'required',
+            'username' => ['required', new \App\Rules\UsernameValidationRule],
             'password' => 'required',
         ]);
     
@@ -23,7 +24,7 @@ class LoginController extends Controller
             $request->session()->regenerate();
             $user = Auth::user();
     
-            if ($user->role === 1) {
+            if ($user->role == 1) {
                 Alert::success('Congrats', 'You\'ve Successfully Logged In as Admin');
                 return redirect()->route('dashboard'); // Admin diarahkan ke '/dashboard'
             }
@@ -33,11 +34,10 @@ class LoginController extends Controller
         }
     
         Alert::error('Login Failed', 'Invalid Credentials');
-        return back();
+        return back()->with('loginError', 'Login Failed!');
     }
 
-    public function logout(Request $request)
-    {
+    public function logout(Request $request) {
         Auth::logout();
 
         $request->session()->invalidate();

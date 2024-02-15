@@ -10,13 +10,23 @@
     
         /* Warna ikon */
         .carousel-control-prev-icon, .carousel-control-next-icon {
-            color: #7CA982;
+            color: #558564;
         }
 
         .carousel-item img {
         width: 100%;
         max-height: 360px; 
         object-fit: scale-down;
+        }
+        
+        h2 {
+            color: #ECA400;
+        }
+        
+        #btnTemp {
+            background-color: #558564;
+            color: #FFFFFF;
+            margin-top: 10pt;
         }
     </style>
 
@@ -60,19 +70,18 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <h2 class="card-title">{{ $product->product_name }}</h2>
-                                <h6 class="card-text mt-5">Harga Kotak : Rp {{ number_format($product->price_unit, 2, '.', ',') }}</h6>
-                                <h6 class="card-text mt-3">Isi per Dus : {{ $product->unit_per_box }} kotak</h6>
-                                <h6 class="card-text mt-3">Tersedia {{ $product->stocks }} buah</h6></label>
+                                <h5 class="card-text">{{ $product->product_name }}</h5>
+                                <h2 class="card-text">Rp {{ number_format($product->price_unit, 2, '.', ',') }}</h2>
+                                <h6 class="card-text mt-3 mb-5">Tersedia {{ $product->stocks }} buah</h6>
+                                <p>Pembelian diatas {{$product->unit_per_box}} buah, harga satuan menjadi Rp {{ number_format($product->price_box_unit, 2, '.', ',')}}</p>
 
                                 <form action="{{ route('add_to_cart', ['id' => $product->id]) }}" method="POST">
                                     @csrf
-
                                     <div class="form-group">
                                         <label for="quantity">Jumlah:</label>
-                                        <input type="number" class="form-control mt-3" name="quantity" id="quantity" value="1" min="1" max="{{ $product->stocks }}">
+                                        <input type="number" class="form-control mt-3" name="quantity" id="quantity" value="1">
                                     </div>
-                                    <button type="submit" class="btn mt-3 text-white" style="background-color: #7CA982">+ Tambah ke Keranjang</button>
+                                    <button type="submit" class="btn" id="btnTemp">+ Tambah ke Keranjang</button>
                                 </form>
                             </div>
                         </div>
@@ -82,7 +91,8 @@
                 <div class="col-md-12 mt-3">
                     <div class="card" >
                         <div class="card-body">
-                            <p class="m-2">{ $product->description }</p>
+                            <h6 class="card-text m-2 mb-3" style="text">Tentang produk</h6>
+                            <p class="card-text m-2">{!! nl2br(e($product->description)) !!}</p>
                         </div>
                     </div>
                 </div>

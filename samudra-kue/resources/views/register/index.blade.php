@@ -28,8 +28,8 @@
                                     <div>
                                         {{ $message }}
                                     </div>
-                                @enderror
-                                <input type="text" class="form-control rounded-top @error('full_name') is-invalid @enderror" name="full_name" id="full_name" placeholder="FullName" required value="{{ old('full_name') }}">
+                                    @enderror
+                                    <input type="text" class="form-control rounded-top @error('full_name') is-invalid @enderror" name="full_name" id="full_name" placeholder="Masukkan nama lengkap anda" required value="{{ old('full_name') }}">
                             </div>
         
                             <div class="form-group mb-2">
@@ -39,7 +39,7 @@
                                         {{ $message }}
                                     </div>                         
                                 @enderror
-                                <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" id="username" placeholder="Username" required value="{{ old('username') }}">
+                                <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" id="username" placeholder="Minimal 1 karakter tanpa spasi" required value="{{ old('username') }}">
                             </div>
         
                             <div class="form-group mb-2">
@@ -49,7 +49,7 @@
                                         {{ $message }}
                                     </div>                         
                                 @enderror
-                                <input type="text" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" id="phone_number" placeholder="08xxxxxxxx" required value="{{ old('phone_number') }}">                        
+                                <input type="text" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" id="phone_number" placeholder="Format: +628xxxxxxxx" required value="{{ old('phone_number') }}">                        
                             </div>
         
                             <div class="form-group mb-2">
@@ -61,12 +61,12 @@
                                 @enderror
                                 <input type="password" class="form-control rounded-bottom @error('password')
                                     is-invalid
-                                @enderror" name="password" id="password" placeholder="Password" required>
+                                @enderror" name="password" id="password" placeholder="Minimal 8 karakter" required>
                             </div>
         
                             <div>
                                 <div class="form-group">
-                                    <input class="form-control btn mt-3 text-white" type="submit" name="submit" id="submit" value="Register" style="background-color: #7CA982">
+                                    <input class="form-control btn mt-3 text-white" type="submit" name="submit" id="submit" value="Register" style="background-color: #558564">
                                 </div>
                                 <div class="mt-3">
                                     <p>Sudah punya akun? <a href="/login">Masuk</a></p>
@@ -78,27 +78,6 @@
             </section>
         </div>
     </div>
-
-    {{-- <script type="text/javascript">
-        function contoh() {
-           swal({
-                title: "Berhasil!",
-                text: "Pop-up berhasil ditampilkan",
-                icon: "success",
-                button: true
-            });
-        }
-    </script> --}}
-
-    {{-- @if(session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Pendaftaran Berhasil!',
-                text: "{{ session('success') }}",
-            });
-        </script>
-    @endif --}}
 
     @if(session('success'))
         <script>

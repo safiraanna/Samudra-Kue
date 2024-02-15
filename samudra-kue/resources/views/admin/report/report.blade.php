@@ -16,25 +16,49 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Tahun</th>
+                                    <!--<th scope="col">Bulan</th>-->
                                     <th scope="col">Bulan</th>
-                                    <th scope="col">Minggu</th>
                                     <th scope="col">Total Penjualan</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
     
                             <tbody>
-                                @foreach ($weeklySales as $sales)
+                                @foreach ($monthlySales as $sales)
                                     <tr>
                                         <td>{{ $sales->year }}</td>
                                         <td>{{ $sales->month }}</td>
-                                        <td>{{ $sales->week }}</td>
                                         <td>Rp {{ number_format($sales->total_sales, 2, '.', ',') }}</td>
-                                        <td><a href="{{ route('weekly.sales.details', ['year' => $sales->year, 'month' => $sales->month, 'week' => $sales->week]) }}">details</a></td>
+                                        <td>
+                                            <a href="{{ route('weekly.sales.details', ['year' => $sales->year, 'month' => $sales->month]) }}">Detail</a> |
+                                            <a href="{{ route('admin.report.print-monthly', ['year' => $sales->year, 'month' => $sales->month]) }}">Cetak Laporan</a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        
+                        <div class="pagination">
+                            @if ($monthlySales->onFirstPage())
+                                <span class="disabled">&lt;</span>
+                            @else
+                                <a href="{{ $monthlySales->previousPageUrl() }}" rel="prev">&lt;</a>
+                            @endif
+                        
+                            @foreach ($monthlySales->getUrlRange(1, $monthlySales->lastPage()) as $page => $url)
+                                @if ($page == $monthlySales->currentPage())
+                                    <span class="current">{{ $page }}</span>
+                                @else
+                                    <a href="{{ $url }}">{{ $page }}</a>
+                                @endif
+                            @endforeach
+                        
+                            @if ($monthlySales->hasMorePages())
+                                <a href="{{ $monthlySales->nextPageUrl() }}" rel="next">&gt;</a>
+                            @else
+                                <span class="disabled">&gt;</span>
+                            @endif
+                        </div>
 
                         <br><br>
     

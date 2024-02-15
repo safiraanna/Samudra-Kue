@@ -41,5 +41,13 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+        </script>
     </section>
 @endsection

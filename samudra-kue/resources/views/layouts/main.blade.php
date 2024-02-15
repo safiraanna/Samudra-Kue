@@ -8,6 +8,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
@@ -18,21 +19,31 @@
             left: 0;
             right: 0;
             z-index: 100;
-            background-color: #7CA982;
+            background-color: #FFFFFF;
         }
         .nav-item.dropdown .dropdown-item:active {
-            background-color: #7CA982;
-            color: #FFFFFF;
+            background-color: #ECA400;
         }
-
+        
+        .navbar-collapse {
+            background-color: #FFFFFF;
+            margin-left: 10px;
+        }
+        
+        .navbar-toggler {
+            position: fixed;
+            right: 15px; /* Atur sesuai kebutuhan jarak dari kiri */
+            transform: translateX(0);
+        }
+        
         .footer {
             position: relative;
             bottom: 0;
             width: 100%;
             background-color: #FFFFFF;
-            border-top: 2px solid #7CA982;
+            border-top: 2px solid #558564;
             text-decoration: none;
-            color: #243E36;
+            color: #252525;
         }
 
         .footer-column ul {
@@ -49,41 +60,79 @@
             padding-top: 0px;
             padding-bottom: 0px;
         }
+        
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: auto;
+        }
+        
+        .pagination a, .pagination span {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 0 2px;
+            background-color: #ddd;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .pagination a:hover {
+            background-color: #F9F9F9;
+            color: #252525;
+        }
+        
+        .pagination .current {
+            background-color: #558564;
+            color: #fff;
+            padding: 6px 11px;
+            margin: 0 2px;
+        }
+        
+        .pagination .disabled {
+            background-color: #ddd;
+            color: #999;
+        }
     </style>
 </head>
 
 <body class="container-boxes" style="background-color: #FFFFFF;">
     @include('sweetalert::alert')
     
-    <nav class="navbar navbar-expand-lg navbar-light" style="height: 70px">
+    <nav class="navbar navbar-expand-lg navbar-light mr-5" style="height: 70px">
         <div>
-            <a class="navbar-brand mb-0 h1 ml-5 text-white" href="/">
+            <a class="navbar-brand mb-0 h1 ml-5" href="/">
                 <img src="{{ asset('images/logo-fix.png') }}" alt="" width="40" height="25" class="d-inline-block align-top">
                 Samudra Kue
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle-navigation">
+            
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
 
-        <div class="collapse navbar-collapse" id="navbarNav" style="background-color: #7CA982">
-            <ul class="navbar-nav ml-auto mr-5">
-                <li class="nav-item"><a class="nav-link text-white" href="{{ url('about') }}">Tentang Kami</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="/">Katalog</a></li>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto mr-2">
+                <li class="nav-item"><a class="nav-link" href="{{ url('about') }}">Tentang Kami</a></li>
+                <li class="nav-item"><a class="nav-link" href="/">Katalog</a></li>
+                
                 @guest
-                    <li class="nav-item"><a class="nav-link text-white" href="{{ url('login') }}">Masuk</a></li>
-                    <li class="nav-item"><div class="card" style="background-color: #E0EEC6"><a class="nav-link" href="/register" style="color: #243E36">Daftar</a></div></li>
-                @else
+                    <li class="nav-item"><a class="nav-link" href="{{ url('login') }}">Masuk</a></li>
+                    <li class="nav-item"><div class="card" style="background-color: #558564"><a class="nav-link" href="/register" style="color: #ffffff">Daftar</a></div></li>
+                @endguest
+                
+                @auth
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ auth()->user()->username }}</a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ auth()->user()->username }}</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="/cart">Keranjang Saya</a>
                             <a class="dropdown-item" href="/orders">Pesanan Saya</a>
                             <a class="dropdown-item" href="/addresses">Alamat Saya</a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/logout">Logout</a>
                         </div>
                     </li>
-                @endguest
+                @endauth
             </ul>
         </div>
     </nav>

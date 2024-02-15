@@ -29,18 +29,30 @@
                                     <td>{{ $order->payment_total }}</td>
                                     <td>
                                         {{ $order->payment_status }}
+                                        {{-- @if ($order->payment_status == 0)
+                                            Belum Bayar
+                                        @elseif ($order->payment_status == 1)
+                                            Sudah Bayar
+                                        @else
+                                            Status tidak diketahui
+                                        @endif --}}
                                     </td>
                                     <td>
                                         {{ $order->order_status }}
+                                        {{-- @if ($order->order_status == 0)
+                                            Belum Diproses
+                                        @elseif ($order->order_status == 1)
+                                            Sedang Diproses
+                                        @else
+                                            Status tidak diketahui
+                                        @endif --}}
                                     </td>
                                     <td>
                                         <div>
-                                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#updateStatusModal{{ $order->id }}">
-                                                Ubah Status
-                                            </button>
+                                            <button type="button" class="btn" data-toggle="modal" data-target="#updateStatusModal{{ $order->id }}"><span style="color: #ECA400; font-weight: bold">Ubah Status</span></button>
                                         </div>
                                         <div class="mt-3">
-                                            <a href="{{ route('details.orders', ['order' => $order->id]) }}"><button type="button" class="btn btn-primary">Lihat Pesanan</button></a>
+                                            <a href="{{ route('details.orders', ['order' => $order->id]) }}"><button type="button" class="btn">Lihat Pesanan</button></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -61,6 +73,7 @@
                                                     <div class="form-group">
                                                         <label for="order_status">Status Pesanan</label>
                                                         <select name="order_status" id="order_status" class="form-control">
+                                                            {{-- <option value="Pesanan diterima oleh toko" @if ($order->order_status == 'Pesanan diterima oleh toko') selected @endif>Belum Diproses</option> --}}
                                                             <option value="Pesanan sedang dikemas" @if ($order->order_status == 'Pesanan sedang dikemas') selected @endif>Sedang Diproses</option>
                                                             <option value="Pesanan dalam pengantaran ke tujuan" @if ($order->order_status == 'Pesanan sedang dikemas') selected @endif>Sedang Diantar</option>
                                                             <option value="Pesanan selesai" @if ($order->order_status == 'Pesanan selesai') selected @endif>Pesanan Selesai</option>
@@ -78,6 +91,10 @@
                             @endforeach
                         </tbody>
                     </table>
+                    
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $pesanan->links() }}
+                    </div>
                 </div>
             </div>
         </div>

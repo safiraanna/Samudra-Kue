@@ -13,10 +13,14 @@
                         @csrf
                         @method('POST')
 
-                        <div class="mb-2">
+                        <div>
                             <h6 class="d-inline">Status Pesanan : </h6>
                             <span>{{ $order->order_status }}</span>
                         </div>  
+
+                        <div class="text-right mb-1">
+                            <a style="text-decoration: none" href="{{ url('/generate-invoice/' . $order->id) }}" target="_blank">Lihat Invoice</a>
+                        </div>
         
                         <div class="card">
                             <div class="card-body">

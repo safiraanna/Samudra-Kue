@@ -13,23 +13,25 @@
                       <div class="form-check"></div>
           
                       <div class="border-left pl-2">
-                        <span class="head">Total amount due</span>
+                        <span class="head">Total pembayaran</span>
                         <div>
                           <span class="dollar">Rp.</span>
-                          <span class="amount">{{$order->payment_total + $order->shipping_cost}}</span>
+                          <span class="amount">{{$order->payment_total}}</span>
                         </div>
                       </div>
                     </div>
                 </div>
                 
                 <div class="text-right">
-                    <button type="button" class="btn mt-3 text-white" id="pay-button" style="background-color: #7CA982">Pay Amount</button>
+                    <button type="button" class="btn mt-3 text-white" id="pay-button" style="background-color: #558564">Bayar</button>
                 </div>
             </div>
         </div>
 
         <form action="{{ route('update.checkout') }}" id="submit_form" method="POST">
             @csrf
+            {{-- ini biar data payment bisa masuk ke database, pake id "json_callback" yang di olah pake kodingan func
+             send_response_to_form(result) --}}
             <input type="hidden" name="order_id" value="{{ $order->id }}">
             <input type="hidden" name="json" id="json_callback">
           </form>

@@ -14,7 +14,25 @@
 
         .custom-card .card-title {
             font-size: 16px;
-            color: #001A23
+            color: #252525
+        }
+        
+        .banner-container {
+            background: url('{{ asset('storage/store.jpg') }}') center/cover no-repeat;
+            padding: 70px 0;
+            text-align: center;
+            color: #ffffff;
+        }
+        
+        #checkNow {
+            background-color: #ECA400;
+            color: #FFFFFF;
+            margin-top: 10pt;
+        }
+        
+        #btnTemp {
+            background-color: #558564;
+            color: #FFFFFF;
         }
     </style>
 </head>
@@ -27,11 +45,16 @@
             <div class="col-md-6 offset-md-3">
                 <h1>Satu Tempat untuk Semua Jenis Kebutuhan Makanan Ringan!</h1>
                 <p>Berlimpah Varian, Ketersediaan Penuh! Grosir Snack Pilihanmu.</p>
+                <button class="btn" id="checkNow">Check sekarang!</button>
             </div>
         </div>
     </div>
-
+    
     <section>
+        <div id="catalog-anchor">
+            <br>
+        </div>
+        
         <div class="container text-center mt-5">
             <div class="row justify-content-center">
                 <div class="col-md-6">
@@ -46,14 +69,15 @@
                         <p>Tidak ada produk yang sesuai dengan kata kunci tersebut</p>
                     @endif
                 </div>
-            </div> 
+            </div>
         </div>
+
         
         <div class="row text-center">
             @foreach ($products as $product)
             <div class="col-md-2 col-sm-6 mt-5">
                 <div class="card custom-card mb-3">
-                    <a href="{{url(sprintf('product/%s', $product->id)) }}" class="text-decoration-none"> {{-- sprintf itu pemformatan string, untuk menggabungkan product/ dengan product->id --}}
+                    <a href="{{url(sprintf('product/%s', $product->id)) }}" class="text-decoration-none">
                         @if($product->stocks == 0) 
                             <img src="{{ asset('storage/soldout.png') }}" style="height: 12rem">
                             <div class="card-body">
@@ -67,6 +91,7 @@
                             @endif
                             <div class="card-body">
                                 <h3 class="card-title" class="text-decoration-none fs-3">{{$product->product_name}}</h3>
+                                <h6 class="card-text" style="color: #ECA400">Rp {{ number_format($product->price_unit, 2, '.', ',') }}</h6>
                             </div>
                         @endif
                     </a>
@@ -77,6 +102,15 @@
         
         <!-- Paginasi Kustom -->
         @include('layouts.pagination', ['paginator' => $products])
+        
     </section>
+    
+    <script>
+        document.getElementById('checkNow').addEventListener('click', function() {
+            document.getElementById('catalog-anchor').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    </script>
 </body>
 @endsection

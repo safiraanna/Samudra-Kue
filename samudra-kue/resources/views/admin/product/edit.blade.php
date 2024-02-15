@@ -13,7 +13,6 @@
                         <div class="card-body">
                             <form action="{{ route('products.update', $product) }}" method="post" enctype="multipart/form-data">
                                 @csrf
-                                @method('PUT')
     
                                 <div class="form-group mb-2">
                                     <label for="product_name">Nama Product</label>
@@ -55,7 +54,7 @@
                                     <input type="file" class="form-control" name="images" id="images">
                                 </div>
     
-                                <button class="btn btn-block form-control mt-3 text-white" style="background-color: #30343f">Tambah</button>
+                                <button class="btn btn-block form-control mt-3 text-white" style="background-color: #30343f">Simpan</button>
                             </form>
                         </div>
                     </div>

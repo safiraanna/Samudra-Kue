@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
-class ShippingAddressController extends Controller
-{
+class ShippingAddressController extends Controller {
     public function create() {
         return view('user.addresses.create');
     }
@@ -39,7 +38,7 @@ class ShippingAddressController extends Controller
 
     public function edit($id) {
         $address = ShippingAddress::findOrFail($id);
-        // Sesuaikan dengan view yang Anda inginkan
+
         return view('user.addresses.edit', compact('address'));
     }
 
@@ -73,10 +72,6 @@ class ShippingAddressController extends Controller
     public function show(ShippingAddress $shippingAddress) {
         $shippingAddress = ShippingAddress::where('userID', auth()->id())->first();
 
-        return view('user.addresses.index', [
-            'active' => 'shipping_address',
-            'title' => "Alamat",
-            'shippingAddress' => $shippingAddress, // Perhatikan penggunaan 'shippingAddresses' (jamak) bukan 'shippingAddress' (tunggal).
-        ]);
+        return view('user.addresses.index', compact('shippingAddress'));
     }
 }
